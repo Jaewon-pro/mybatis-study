@@ -3,6 +3,8 @@
 
 <configuration>
     <typeAliases>
-        <typeAlias type="com.example.learn.dto.MemberDTO" alias="MemberDTO"/>
+        <typeAlias type="com.example.learn.domain.member.entity.Member" alias="Member"/>
+        <typeAlias type="com.example.learn.domain.article.entity.Article" alias="Article"/>
+        <typeAlias type="com.example.learn.domain.article.entity.ArticleContent" alias="ArticleContent"/>
     </typeAliases>
 </configuration>

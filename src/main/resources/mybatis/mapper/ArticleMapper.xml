@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.learn.domain.article.ArticleDAO">
+    <resultMap id="ArticleMap" type="Article">
+        <id column="article_no" property="aid"/>
+        <result column="id" property="wid"/>
+        <result column="name" property="writer"/>
+        <result column="title" property="title"/>
+        <result column="regdate" property="regdate"/>
+        <result column="moddate" property="moddate"/>
+        <result column="read_cnt" property="readcnt"/>
+        <!--        <result column="컬럼" property="DTO 필드 이름" />-->
+    </resultMap>
+
+    <resultMap id="ArticleContentMap" type="ArticleContent">
+        <id column="article_no" property="aid"/>
+<!--        <result column="id" property="wid"/>-->
+<!--        <result column="name" property="writer"/>-->
+<!--        <result column="title" property="title"/>-->
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <select id="getAllArticles" resultMap="ArticleMap">
+        SELECT article_no,
+               m.id      id,
+               name,
+               title,
+               a.regdate regdate,
+               a.moddate moddate,
+               read_cnt
+        FROM article a,
+             member m
+        WHERE a.writer = m.id
+        ORDER BY article_no
+    </select>
+
+    <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true"
+            keyProperty="aid" keyColumn="article_no">
+        INSERT INTO article (writer, title, regdate)
+        VALUES (#{wid}, #{title}, #{regdate})
+    </insert>
+
+    <insert id="insertArticleContent" parameterType="ArticleContent" useGeneratedKeys="true"
+            keyProperty="articleNo" keyColumn="article_no">
+        INSERT INTO article_content
+        VALUES (#{aid}, #{content})
+    </insert>
+
+    <select id="selectMaxArticleNoByWriter" resultType="int">
+        SELECT MAX(article_no)
+        FROM article
+        WHERE writer = #{writer}
+    </select>
+
+    <select id="selectArticleContent" resultMap="ArticleContentMap">
+        SELECT a.article_no article_no, id, name, title, content
+        FROM article a,
+             article_content c,
+             member m
+        WHERE a.article_no = c.article_no
+          AND a.writer = m.id
+          AND a.article_no = #{aid}
+    </select>
+
+    <update id="incrementReadCnt">
+        UPDATE article
+        SET read_cnt = read_cnt + 1
+        WHERE article_no = #{aid}
+    </update>
+
+    <update id="updateArticle">
+        UPDATE article
+        SET title = #{title}
+        WHERE article_no = #{aid}
+    </update>
+
+    <update id="updateArticleContent">
+        UPDATE article_content
+        SET content = #{content}
+        WHERE article_no = #{aid}
+    </update>
+
+</mapper>
