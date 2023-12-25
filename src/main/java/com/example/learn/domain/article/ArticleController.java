@@ -2,6 +2,10 @@ package com.example.learn.domain.article;
 
 import com.example.learn.domain.article.dto.ArticleDTO;
 import com.example.learn.domain.article.dto.ArticleWriteRequest;
+import com.example.learn.domain.member.MemberService;
+import com.example.learn.global.SecurityUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +27,10 @@ public class ArticleController {
 
     @PostMapping
     public ResponseEntity<ArticleDTO> insertArticle(
+            HttpServletRequest request,
             @Valid @RequestBody ArticleWriteRequest articleWriteRequest) {
-        return ResponseEntity.ok(articleService.insertArticle(1, articleWriteRequest));
+        int id = SecurityUtils.getAuthenticationOrThrow(request).getId();
+        return ResponseEntity.ok(articleService.insertArticle(id, articleWriteRequest));
     }
 
 }

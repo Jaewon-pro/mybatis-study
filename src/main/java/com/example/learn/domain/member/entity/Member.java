@@ -1,12 +1,13 @@
 package com.example.learn.domain.member.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@ToString(exclude = {"password"})
 public class Member {
     private int id;
     private String email;
@@ -14,7 +15,8 @@ public class Member {
     private String name;
     private LocalDateTime regdate;
 
-    public Member(
+    @Builder
+    protected Member(
             int id,
             String email,
             String password,

@@ -29,8 +29,9 @@ public class ArticleService {
                 .title(articleWriteRequest.title())
                 .regdate(LocalDateTime.now())
                 .build();
-        ArticleContent articleContent = new ArticleContent(article.getAid(), articleWriteRequest.content());
         articleDAO.insertArticle(article);
+
+        ArticleContent articleContent = new ArticleContent(article.getAid(), articleWriteRequest.content());
         articleDAO.insertArticleContent(articleContent);
         return ArticleDTO.from(article);
     }

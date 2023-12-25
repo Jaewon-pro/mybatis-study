@@ -44,7 +44,7 @@
     <insert id="insertArticleContent" parameterType="ArticleContent" useGeneratedKeys="true"
             keyProperty="articleNo" keyColumn="article_no">
         INSERT INTO article_content
-        VALUES (#{aid}, #{content})
+        VALUES (#{articleNo}, #{content})
     </insert>
 
     <select id="selectMaxArticleNoByWriter" resultType="int">
