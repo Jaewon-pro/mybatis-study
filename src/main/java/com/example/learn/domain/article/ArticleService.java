@@ -4,6 +4,7 @@ import com.example.learn.domain.article.dto.ArticleDTO;
 import com.example.learn.domain.article.dto.ArticleWriteRequest;
 import com.example.learn.domain.article.entity.Article;
 import com.example.learn.domain.article.entity.ArticleContent;
+import com.example.learn.global.page.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,13 @@ public class ArticleService {
 
     public List<ArticleDTO> getAllArticles() {
         return articleDAO.getAllArticles()
+                .stream()
+                .map(ArticleDTO::from)
+                .toList();
+    }
+
+    public List<ArticleDTO> getAllArticles(Pagination pagination) {
+        return articleDAO.getAllArticlesByPagination(pagination)
                 .stream()
                 .map(ArticleDTO::from)
                 .toList();

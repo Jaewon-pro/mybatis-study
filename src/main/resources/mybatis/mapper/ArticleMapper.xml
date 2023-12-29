@@ -35,6 +35,24 @@
         ORDER BY article_no
     </select>
 
+    <select id="getAllArticlesByPagination" resultMap="ArticleMap" parameterType="Pagination">
+        <![CDATA[
+        SELECT *
+        FROM (SELECT article_no,
+                     m.id      AS id,
+                     name,
+                     title,
+                     a.regdate AS regdate,
+                     a.moddate AS moddate,
+                     read_cnt,
+                     ROW_NUMBER() OVER (ORDER BY article_no) AS row_num
+              FROM article a
+                       JOIN member m ON a.writer = m.id) AS numbered_rows
+        WHERE row_num BETWEEN #{pageNo} * #{offset} + 1 AND (#{pageNo} + 1) * #{offset}
+        ORDER BY row_num ${direction};
+        ]]>
+    </select>
+
     <insert id="insertArticle" parameterType="Article" useGeneratedKeys="true"
             keyProperty="aid" keyColumn="article_no">
         INSERT INTO article (writer, title, regdate)
